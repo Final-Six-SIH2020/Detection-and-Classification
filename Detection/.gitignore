@@ -1,0 +1,10 @@
+.ipynb_checkpoints/
+.vscode/settings.json
+*_images/
+Colab*/
+pretrained*/
+__*/
+.*/
+*.rar
+SIH_COLAB.zip
+*.zip
