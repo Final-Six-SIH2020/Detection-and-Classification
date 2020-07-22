@@ -44,6 +44,8 @@ def class_text_to_int(row_label):
         return 4
     elif row_label == classes[5]:  # Traffic_sign
         return 5
+    elif row_label == classes[6]:  # Person
+        return 6
     else:
         None
 
@@ -117,6 +119,7 @@ if __name__ == '__main__':
         2: 'speed_sign',
         3: 'Stop_sign',
         4: 'Traffic_light',
-        5: 'Traffic_sign'
+        5: 'Traffic_sign',
+        6: 'Person'
     }
     tf.compat.v1.app.run()
