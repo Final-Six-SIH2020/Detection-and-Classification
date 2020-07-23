@@ -11,7 +11,7 @@ import argparse
 from PIL import Image
 from tqdm import tqdm
 from object_detection.utils import dataset_util
-from collections import namedtuple, OrderedDict
+from collections import namedtuple
 
 
 def __split(df, group):
@@ -21,6 +21,7 @@ def __split(df, group):
         data(filename, gb.get_group(x))
         for filename, x in zip(gb.groups.keys(), gb.groups)
     ]
+
 
 def class_text_to_int(row_label):
     if row_label == classes[1]:  # 'Bus':
