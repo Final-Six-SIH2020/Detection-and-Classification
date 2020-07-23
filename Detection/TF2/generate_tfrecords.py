@@ -117,19 +117,19 @@ if __name__ == '__main__':
         formatter_class=argparse.RawDescriptionHelpFormatter)
 
     parser.add_argument(
-        'csv_input',
+        '--csv-input',
         metavar='csv_input',
         type=str,
         help='Path to the CSV input')
 
     parser.add_argument(
-        'image_dir',
+        '--image-dir',
         metavar='image_dir',
         type=str,
         help='Path to the directory containing all images')
 
     parser.add_argument(
-        'output_path',
+        '--output-path',
         metavar='output_path',
         type=str,
         help='Path to output TFRecord')
