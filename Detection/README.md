@@ -20,8 +20,8 @@ conda activate resiz
 python resize_tool/main.py -p <IMAGE&ANNOT dir> -o <RESIZED_OUTPUT_DIR> -x <NEW_X> -y <NEW_Y> -s <1 or 0>
 ``` 
 
-1) Execute Image augmentations which will generate __labels.csv__ and __all_labels.csv__.
-2) Generate training and validation splits `split_dataset.py`. Ratio: [90-10].
+6) Execute Image augmentations which will generate __labels.csv__ and __all_labels.csv__.
+7) Generate training and validation splits `split_dataset.py`. Ratio: [90-10].
 
 ```python
 python scripts/split_dataset.py -og annotations\labels.csv -m annotations\all_labels.csv -r 0.1 -o annotations
