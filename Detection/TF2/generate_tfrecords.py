@@ -22,10 +22,21 @@ def __split(df, group):
         for filename, x in zip(gb.groups.keys(), gb.groups)
     ]
 
-
 def class_text_to_int(row_label):
-    if row_label == classes[1]:  # 'tag':
+    if row_label == classes[1]:  # 'Bus':
         return 1
+    elif row_label == classes[2]:  # Car
+        return 2
+    elif row_label == classes[3]:  # speed_sign
+        return 3
+    elif row_label == classes[4]:  # Stop_sign
+        return 4
+    elif row_label == classes[5]:  # Traffic_light
+        return 5
+    elif row_label == classes[6]:  # Traffic_sign
+        return 6
+    elif row_label == classes[7]:  # Person
+        return 7
     else:
         None
 
@@ -125,7 +136,13 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     classes = {
-        1: 'tag',
+        1: 'Bus',
+        2: 'Car',
+        3: 'speed_sign',
+        4: 'Stop_sign',
+        5: 'Traffic_light',
+        6: 'Traffic_sign',
+        7: 'Person'
     }
 
     writer = tf.io.TFRecordWriter(args.output_path)
