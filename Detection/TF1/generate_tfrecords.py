@@ -25,14 +25,12 @@ def class_text_to_int(row_label):
         return 2
     elif row_label == classes[3]:  # speed_sign
         return 3
-    elif row_label == classes[4]:  # Stop_sign
+    elif row_label == classes[4]:  # Traffic_light
         return 4
-    elif row_label == classes[5]:  # Traffic_light
+    elif row_label == classes[5]:  # Traffic_sign
         return 5
-    elif row_label == classes[6]:  # Traffic_sign
+    elif row_label == classes[6]:  # Person
         return 6
-    elif row_label == classes[7]:  # Person
-        return 7
     else:
         None
 
@@ -104,9 +102,8 @@ if __name__ == '__main__':
         1: 'Bus',
         2: 'Car',
         3: 'speed_sign',
-        4: 'Stop_sign',
-        5: 'Traffic_light',
-        6: 'Traffic_sign',
-        7: 'Person'
+        4: 'Traffic_light',
+        5: 'Traffic_sign',
+        6: 'Person'
     }
     tf.compat.v1.app.run()
