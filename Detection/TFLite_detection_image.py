@@ -53,6 +53,11 @@ parser.add_argument(
     default=None,
 )
 parser.add_argument(
+    "--savedir",
+    help="Name of the folder to save results",
+    default=None,
+)
+parser.add_argument(
     "--edgetpu",
     help="Use Coral Edge TPU Accelerator to speed up detection",
     action="store_true",
@@ -65,6 +70,7 @@ GRAPH_NAME = args.graph
 LABELMAP_NAME = args.labels
 min_conf_threshold = float(args.threshold)
 use_TPU = args.edgetpu
+savedir = args.savedir
 
 # Parse input image name and directory.
 IM_NAME = args.image
@@ -81,6 +87,15 @@ if IM_NAME and IM_DIR:
 if not IM_NAME and not IM_DIR:
     IM_NAME = "test1.jpg"
 
+if IM_DIR and not savedir:
+    print(
+        'Error! Please specify the folder to save detection images in. Issue "python TFLite_detection_image.py -h" for help.'
+    )
+    sys.exit()
+
+if savedir:
+    if not os.path.isdir(savedir):
+        os.makedirs(savedir)
 
 CWD_PATH = os.getcwd()
 
@@ -127,6 +142,7 @@ input_std = 127.5
 
 # Loop over every image and perform detection
 for image_path in images:
+    image_name = image_path.split('\\')[-1]
 
     # Load image and resize to expected shape [1xHxWx3]
     image = cv2.imread(image_path)
@@ -156,12 +172,7 @@ for image_path in images:
     ]  # Confidence of detected objects
     # Total number of detected objects (inaccurate and not needed)
     num = interpreter.get_tensor(output_details[3]['index'])[0]
-    # print(boxes)
-    # print()
-    # print(classes)
-    # print()
-    # print(scores)
-    # print()
+
     # Loop over all detections and draw detection box if confidence is above minimum threshold
     for i in range(len(scores)):
         if (scores[i] > min_conf_threshold) and (scores[i] <= 1.0):
@@ -205,9 +216,9 @@ for image_path in images:
                 (0, 0, 0),
                 2,
             )  # Draw label text
-
     # All the results have been drawn on the image, now display the image
     cv2.imshow("Object detector", image)
+    cv2.imwrite(os.path.join(CWD_PATH, savedir, image_name), image)
 
     # Press any key to continue to next image, or press 'q' to quit
     if cv2.waitKey(0) == ord("q"):

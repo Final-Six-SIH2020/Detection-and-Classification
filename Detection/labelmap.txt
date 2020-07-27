@@ -2,6 +2,6 @@
 Bus
 Car
 speed_sign
-Stop_sign
 Traffic_light
 Traffic_sign
+Person
