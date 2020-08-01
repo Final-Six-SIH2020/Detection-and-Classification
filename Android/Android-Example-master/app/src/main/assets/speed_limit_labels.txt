@@ -1,5 +1,10 @@
-certificate
-document
-ear
-eye
-nose
+Speed_20
+Speed_30
+Speed_50
+Speed_60
+Speed_70
+Speed_80
+Speed_E80
+Speed_100
+Speed_120
+not_speed
