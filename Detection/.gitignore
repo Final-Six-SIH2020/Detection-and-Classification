@@ -15,3 +15,4 @@ temp_video.mp4
 TF1/trained_*/
 TF2/D*/
 RESET/
+*.tflite
