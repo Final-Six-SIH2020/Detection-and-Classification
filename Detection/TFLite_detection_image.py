@@ -25,35 +25,35 @@ import glob
 # Define and parse input arguments
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    "--modeldir", help="Folder the .tflite file is located in", required=True
+    "-m", "--modeldir", help="Folder the .tflite file is located in", required=True
 )
 parser.add_argument(
-    "--graph",
+    "-g", "--graph",
     help="Name of the .tflite file, if different than detect.tflite",
     default="detect.tflite",
 )
 parser.add_argument(
-    "--labels",
+    "-l", "--labels",
     help="Name of the labelmap file, if different than labelmap.txt",
     default="labelmap.txt",
 )
 parser.add_argument(
-    "--threshold",
+    "-t", "--threshold",
     help="Minimum confidence threshold for displaying detected objects",
     default=0.4,
 )
 parser.add_argument(
-    "--image",
+    "-i", "--image",
     help="Name of the single image to perform detection on. To run detection on multiple images, use --imagedir",
     default=None,
 )
 parser.add_argument(
-    "--imagedir",
+    "-id", "--imagedir",
     help="Name of the folder containing images to perform detection on. Folder must contain only images.",
     default=None,
 )
 parser.add_argument(
-    "--savedir",
+    "-s", "--savedir",
     help="Name of the folder to save results",
     default=None,
 )
@@ -102,7 +102,7 @@ CWD_PATH = os.getcwd()
 # Define path to images and grab all image filenames
 if IM_DIR:
     PATH_TO_IMAGES = os.path.join(CWD_PATH, IM_DIR)
-    images = glob.glob(PATH_TO_IMAGES + "/*")
+    images = glob.glob(PATH_TO_IMAGES + "\\*.jpg")
 
 elif IM_NAME:
     PATH_TO_IMAGES = os.path.join(CWD_PATH, IM_NAME)
@@ -218,7 +218,7 @@ for image_path in images:
             )  # Draw label text
     # All the results have been drawn on the image, now display the image
     cv2.imshow("Object detector", image)
-    cv2.imwrite(os.path.join(CWD_PATH, savedir, image_name), image)
+    # cv2.imwrite(os.path.join(CWD_PATH, savedir, image_name), image)
 
     # Press any key to continue to next image, or press 'q' to quit
     if cv2.waitKey(0) == ord("q"):

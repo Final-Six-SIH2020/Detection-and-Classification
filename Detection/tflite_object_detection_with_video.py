@@ -4,42 +4,53 @@ import argparse
 import time
 import cv2
 import re
-from PIL import Image, ImageDraw, ImageFont
 import numpy as np
+# from multiprocessing import Pipe
+# import multiprocessing
 
 
 def draw_image(image, results, labels, size):
-    result_size = len(results)
+    # result_size = len(results)
     for idx, obj in enumerate(results):
-        print(obj)
         # Prepare image for drawing
-        draw = ImageDraw.Draw(image)
+        # draw = ImageDraw.Draw(Image.fromarray(image))
+        if labels[obj['class_id']] in ("car", "bus", "person"):
+            # Prepare boundary box
+            ymin, xmin, ymax, xmax = obj["bounding_box"]
 
-        # Prepare boundary box
-        ymin, xmin, ymax, xmax = obj["bounding_box"]
-        xmin = int(xmin * size[0])
-        xmax = int(xmax * size[0])
-        ymin = int(ymin * size[1])
-        ymax = int(ymax * size[1])
+            xmin = int(max(1, xmin * size[0]))
+            xmax = int(min(size[0], xmax * size[0]))
+            ymin = int(max(1, ymin * size[1]))
+            ymax = int(min(size[1], ymax * size[1]))
 
-        # Draw rectangle to desired thickness
-        for x in range(0, 4):
-            draw.rectangle((ymin, xmin, ymax, xmax), outline=(255, 255, 0))
+            # Draw rectangle to desired thickness
+            label = f"{labels[obj['class_id']]}: {round(obj['score'] * 100, 2)}%"
+            print(label)
+            # break
+            labelSize, baseLine = cv2.getTextSize(
+                label, cv2.FONT_HERSHEY_SIMPLEX, 0.7, 2
+            )
 
-        # Annotate image with label and confidence score
-        display_str = (
-            labels[obj["class_id"]] + ": " + str(round(obj["score"] * 100, 2)) + "%"
-        )
-        draw.text(
-            (ymin, xmin),
-            display_str,
-            font=ImageFont.truetype(
-                "/usr/share/fonts/truetype/piboto/Piboto-Regular.ttf", 20
-            ),
-        )
-
-        displayImage = np.asarray(image)
-        cv2.imshow("Coral Live Object Detection", displayImage)
+            label_ymin = max(
+                ymin, labelSize[1] + 10
+            )
+            cv2.rectangle(
+                image,
+                (xmin, label_ymin - labelSize[1] - 10),
+                (xmin + labelSize[0], label_ymin + baseLine - 10),
+                (255, 255, 255),
+                cv2.FILLED,
+            )  # Draw white box to put label text in
+            cv2.putText(
+                image,
+                label,
+                (xmin, label_ymin - 7),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.7,
+                (0, 0, 0),
+                2,
+            )
+        cv2.imshow("Live Object Detection", image)
 
 
 def load_labels(path):
@@ -53,7 +64,7 @@ def load_labels(path):
                 labels[int(pair[0])] = pair[1].strip()
             else:
                 labels[row_number] = pair[0].strip()
-    print(labels)
+    # print(labels)
     return labels
 
 
@@ -72,7 +83,8 @@ def get_output_tensor(interpreter, index):
 
 
 def detect_objects(interpreter, image, threshold):
-    """Returns a list of detection results, each a dictionary of object info."""
+    """Returns a list of detection results, each a
+    dictionary of object info."""
     set_input_tensor(interpreter, image)
     interpreter.invoke()
 
@@ -114,10 +126,12 @@ def main():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     parser.add_argument(
-        "-m", "--model", type=str, required=True, help="File path of .tflite file."
+        "-m", "--model", type=str, required=True,
+        help="File path of .tflite file."
     )
     parser.add_argument(
-        "-l", "--labels", type=str, required=True, help="File path of labels file."
+        "-l", "--labels", type=str, required=True,
+        help="File path of labels file."
     )
     parser.add_argument(
         "-t",
@@ -127,7 +141,8 @@ def main():
         required=False,
         help="Score threshold for detected objects.",
     )
-    parser.add_argument("-v", "--video", type=str, required=True, help="Path to video")
+    parser.add_argument("-v", "--video", type=str,
+                        required=True, help="Path to video")
     parser.add_argument(
         "-e", "--use_edgetpu", action="store_true", default=False, help="Use EdgeTPU"
     )
@@ -136,7 +151,8 @@ def main():
     labels = load_labels(args.labels)
     interpreter = make_interpreter(args.model, args.use_edgetpu)
     interpreter.allocate_tensors()
-    _, input_height, input_width, _ = interpreter.get_input_details()[0]["shape"]
+    _, input_height, input_width, _ = interpreter.get_input_details()[
+        0]["shape"]
 
     # Initialize video stream
     cap = cv2.VideoCapture(args.video)
@@ -150,18 +166,23 @@ def main():
             input_data = np.expand_dims(frame_resized, axis=0)
             # Perform inference
             results = detect_objects(interpreter, input_data, args.threshold)
-            print(results)
-            break
-            # draw_image(frame_rgb, results, labels, frame_rgb.size)
+            # print(results)
+            width = cap.get(3)  # float
+            height = cap.get(4)  # float
 
+            # print('width, height:', width, height)
+            # print(frame.shape)
+            # break
+            draw_image(frame, results, labels, (width, height))
+            # break
             if cv2.waitKey(5) & 0xFF == ord("q"):
-                fps.stop()
+                # fps.stop()
                 break
         except KeyboardInterrupt:
             break
 
     cv2.destroyAllWindows()
-    video.release()
+    cap.release()
     time.sleep(2)
 
 

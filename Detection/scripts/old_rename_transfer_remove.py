@@ -92,27 +92,25 @@ def find_and_remove_missing(directory):
 
 if __name__ == "__main__":
     curr_dir = os.getcwd()
-    print(curr_dir)
-    folders = ['Bus', 'Car', 'Stop_sign', 'Traffic_light', 'Traffic_sign']
+    # print(curr_dir)
+    folders = ['Bus', 'Car']
 
-    rename_files(curr_dir, folders)
-    print("Renaming Complete")
+    # rename_files(curr_dir, folders)
+    # print("Renaming Complete")
     # ------------------------------------
-    src_folder = ['Bus', 'Car', 'Stop_sign', 'speed_sign',
-                  'Traffic_light', 'Traffic_sign']
+    src_folder = ['Bus', 'Car', 'speed_sign']
 
     dst_folder = input("Enter destination folder name: ")
 
-    if os.path.isdir(dst_folder):
-        shutil.rmtree(dst_folder)
+    # if not os.path.isdir(dst_folder):
+    #     os.makedirs(dst_folder)
+    #     # shutil.rmtree(dst_folder)
 
-    os.makedirs(dst_folder)
+    # move_or_copy(src_folder, dst_folder, doCopy=True)
+    # print("Transfer Complete")
 
-    move_or_copy(src_folder, dst_folder, doCopy=True)
-    print("Transfer Complete")
-
-    for i in src_folder:
-        print("Removing redundant directory: ", i)
-        shutil.rmtree(i)
-    # ------------------------------------------
+    # for i in src_folder:
+    #     print("Removing redundant directory: ", i)
+    #     shutil.rmtree(i)
+    # # ------------------------------------------
     find_and_remove_missing(dst_folder)

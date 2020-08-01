@@ -2,6 +2,4 @@
 Bus
 Car
 speed_sign
-Traffic_light
-Traffic_sign
 Person

@@ -1,8 +1,8 @@
 import os
 import shutil
 import os.path as P
-BASE_FOLDER = 'all_new_data-Copy'
-DST_FOLDER = 'Testing'
+BASE_FOLDER = 'kaggle_dataset'
+DST_FOLDER = 'kaggle_renamed'
 
 if P.isdir(DST_FOLDER):
     shutil.rmtree(DST_FOLDER)
@@ -28,8 +28,8 @@ for i, file in enumerate(xml_files, 1):
         missing.append(path)
         continue
 
-    dst_xml_name = f'{i:04}{xml_ext}'
-    dst_img_name = f'{i:04}{img_ext}'
+    dst_xml_name = f'kaggle_{i:04}{xml_ext}'
+    dst_img_name = f'kaggle_{i:04}{img_ext}'
 
     shutil.copy(file, P.join(DST_FOLDER, dst_xml_name))  # XML
 
